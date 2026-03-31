@@ -679,9 +679,21 @@ fn test_rpm_format() -> Result<(), Box<dyn std::error::Error>> {
 
     let pkg_v6 = rpm::PackageMetadata::open(&out_file_v6)?;
 
-    assert!(pkg_v6.header.entry_is_present(rpm::IndexTag::RPMTAG_RPMFORMAT));
-    assert!(pkg_v6.header.entry_is_present(rpm::IndexTag::RPMTAG_PAYLOADSIZE));
-    assert!(pkg_v6.header.entry_is_present(rpm::IndexTag::RPMTAG_LONGSIZE));
+    assert!(
+        pkg_v6
+            .header
+            .entry_is_present(rpm::IndexTag::RPMTAG_RPMFORMAT)
+    );
+    assert!(
+        pkg_v6
+            .header
+            .entry_is_present(rpm::IndexTag::RPMTAG_PAYLOADSIZE)
+    );
+    assert!(
+        pkg_v6
+            .header
+            .entry_is_present(rpm::IndexTag::RPMTAG_LONGSIZE)
+    );
 
     // Test with rpm-version 4 (should not contain RPMFORMAT or PAYLOADSIZE)
     let out_file_v4 = tmp_dir.path().join("test-rpm-format-4-1.0.0-1.noarch.rpm");
@@ -697,8 +709,16 @@ fn test_rpm_format() -> Result<(), Box<dyn std::error::Error>> {
 
     let pkg_v4 = rpm::PackageMetadata::open(&out_file_v4)?;
 
-    assert!(!pkg_v4.header.entry_is_present(rpm::IndexTag::RPMTAG_RPMFORMAT));
-    assert!(!pkg_v4.header.entry_is_present(rpm::IndexTag::RPMTAG_PAYLOADSIZE));
+    assert!(
+        !pkg_v4
+            .header
+            .entry_is_present(rpm::IndexTag::RPMTAG_RPMFORMAT)
+    );
+    assert!(
+        !pkg_v4
+            .header
+            .entry_is_present(rpm::IndexTag::RPMTAG_PAYLOADSIZE)
+    );
     assert!(pkg_v4.header.entry_is_present(rpm::IndexTag::RPMTAG_SIZE));
 
     // Test invalid rpm-version value
