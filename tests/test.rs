@@ -33,7 +33,7 @@ fn test_basic_defaults() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(pkg.metadata.get_description()?, ""); // should be a copy of the summary
     assert_eq!(
         pkg.metadata.get_payload_compressor()?,
-        rpm::CompressionType::default()
+        rpm::CompressionType::Zstd
     );
 
     // provides itself by default

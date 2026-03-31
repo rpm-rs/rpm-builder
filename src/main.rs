@@ -251,7 +251,7 @@ fn main() -> Result<()> {
         Some(Compression::Gzip) => rpm::CompressionType::Gzip,
         Some(Compression::Zstd) => rpm::CompressionType::Zstd,
         Some(Compression::None) => rpm::CompressionType::None,
-        _ => rpm::CompressionType::default(),
+        _ => rpm::CompressionType::Zstd,
     };
 
     let mut config = match args.rpm_format {
