@@ -349,6 +349,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
 
     assert!(!fs::exists(&out_file).unwrap());
     Command::new(cargo_bin!())
+        .env("SOURCE_DATE_EPOCH", "1600000000")
         .args(vec![
             "test-adding-files",
             "--exec-file",

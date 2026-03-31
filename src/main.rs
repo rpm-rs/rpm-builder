@@ -221,6 +221,14 @@ pub struct Cli {
         help = "Sign this package with the specified PGP secret key"
     )]
     pub sign_with_pgp_asc: Option<PathBuf>,
+
+    #[arg(
+        long,
+        value_name = "SOURCE_DATE",
+        help = "Set a source date epoch (unix timestamp) for reproducible builds. \
+                Also supported via the SOURCE_DATE_EPOCH environment variable."
+    )]
+    pub source_date: Option<u32>,
 }
 
 #[derive(ValueEnum, Clone, Debug)]
@@ -253,6 +261,12 @@ fn main() -> Result<()> {
     }
     .compression(compression);
 
+    let source_date = args.source_date.or_else(|| {
+        std::env::var("SOURCE_DATE_EPOCH")
+            .ok()
+            .and_then(|v| v.parse::<u32>().ok())
+    });
+
     let mut builder = rpm::PackageBuilder::new(
         &args.name,
         &args.version,
@@ -263,6 +277,10 @@ fn main() -> Result<()> {
     .using_config(config)
     .release(args.release)
     .epoch(args.epoch);
+
+    if let Some(ts) = source_date {
+        builder = builder.source_date(ts);
+    }
 
     for (src, options) in parse_file_options(&args.file)? {
         builder = builder
