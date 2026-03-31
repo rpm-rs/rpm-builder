@@ -254,7 +254,7 @@ fn main() -> Result<()> {
         _ => rpm::CompressionType::default(),
     };
 
-    let config = match args.rpm_format {
+    let mut config = match args.rpm_format {
         Some(RpmVersion::V4) => rpm::BuildConfig::v4(),
         Some(RpmVersion::V6) => rpm::BuildConfig::v6(),
         None => rpm::BuildConfig::default(),
@@ -267,6 +267,10 @@ fn main() -> Result<()> {
             .and_then(|v| v.parse::<u32>().ok())
     });
 
+    if let Some(ts) = source_date {
+        config = config.source_date(ts);
+    }
+
     let mut builder = rpm::PackageBuilder::new(
         &args.name,
         &args.version,
@@ -277,10 +281,6 @@ fn main() -> Result<()> {
     .using_config(config)
     .release(args.release)
     .epoch(args.epoch);
-
-    if let Some(ts) = source_date {
-        builder = builder.source_date(ts);
-    }
 
     for (src, options) in parse_file_options(&args.file)? {
         builder = builder
