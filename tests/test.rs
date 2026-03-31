@@ -39,10 +39,7 @@ fn test_basic_defaults() -> Result<(), Box<dyn std::error::Error>> {
     // provides itself by default
     assert_eq!(
         pkg.metadata.get_provides()?,
-        vec![
-            rpm::Dependency::eq("test", "1.0.0"),
-            rpm::Dependency::eq("test(noarch)", "1.0.0"),
-        ]
+        vec![rpm::Dependency::eq("test", "0:1.0.0-1"),]
     );
     // has no requires by default, except for rpmlib() ones
     assert_eq!(
@@ -299,8 +296,7 @@ fn test_adding_dependencies() -> Result<(), Box<dyn std::error::Error>> {
         pkg.metadata.get_provides()?,
         vec![
             rpm::Dependency::any("/usr/bin/rpmbuilder"),
-            rpm::Dependency::eq("test-dependencies", "1.0.0"),
-            rpm::Dependency::eq("test-dependencies(noarch)", "1.0.0"),
+            rpm::Dependency::eq("test-dependencies", "0:1.0.0-1"),
         ]
     );
     // has no requires by default, except for rpmlib() ones
@@ -397,13 +393,43 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
     let pkg = rpm::Package::open(&out_file)?;
     let entries = vec![
         rpm::FileEntry {
+            path: PathBuf::from("/etc/test-adding-files"),
+            mode: rpm::FileMode::dir(0o755),
+            ownership: rpm::FileOwnership {
+                user: "root".to_owned(),
+                group: "root".to_owned(),
+            },
+            modified_at: rpm::Timestamp(1600000000),
+            size: 0,
+            flags: rpm::FileFlags::empty(),
+            digest: None,
+            caps: None,
+            linkto: "".to_owned(),
+            ima_signature: None,
+        },
+        rpm::FileEntry {
+            path: PathBuf::from("/etc/test-adding-files/bar"),
+            mode: rpm::FileMode::dir(0o755),
+            ownership: rpm::FileOwnership {
+                user: "root".to_owned(),
+                group: "root".to_owned(),
+            },
+            modified_at: rpm::Timestamp(1600000000),
+            size: 0,
+            flags: rpm::FileFlags::empty(),
+            digest: None,
+            caps: None,
+            linkto: "".to_owned(),
+            ima_signature: None,
+        },
+        rpm::FileEntry {
             path: PathBuf::from("/etc/test-adding-files/bar/a.txt"),
             mode: rpm::FileMode::regular(0o644),
             ownership: rpm::FileOwnership {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756496832),
+            modified_at: rpm::Timestamp(1600000000),
             size: 4,
             flags: rpm::FileFlags::CONFIG,
             digest: Some(rpm::FileDigest {
@@ -422,7 +448,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756496832),
+            modified_at: rpm::Timestamp(1600000000),
             size: 4,
             flags: rpm::FileFlags::CONFIG,
             digest: Some(rpm::FileDigest {
@@ -441,7 +467,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756059087),
+            modified_at: rpm::Timestamp(1600000000),
             size: 31,
             flags: rpm::FileFlags::CONFIG,
             digest: Some(rpm::FileDigest {
@@ -460,7 +486,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756496832),
+            modified_at: rpm::Timestamp(1600000000),
             size: 4,
             flags: rpm::FileFlags::CONFIG,
             digest: Some(rpm::FileDigest {
@@ -479,7 +505,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756059087),
+            modified_at: rpm::Timestamp(1600000000),
             size: 118,
             flags: rpm::FileFlags::empty(),
             digest: Some(rpm::FileDigest {
@@ -492,13 +518,28 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             ima_signature: None,
         },
         rpm::FileEntry {
+            path: PathBuf::from("/usr/lib/test-adding-files"),
+            mode: rpm::FileMode::dir(0o755),
+            ownership: rpm::FileOwnership {
+                user: "root".to_owned(),
+                group: "root".to_owned(),
+            },
+            modified_at: rpm::Timestamp(1600000000),
+            size: 0,
+            flags: rpm::FileFlags::empty(),
+            digest: None,
+            caps: None,
+            linkto: "".to_owned(),
+            ima_signature: None,
+        },
+        rpm::FileEntry {
             path: PathBuf::from("/usr/lib/test-adding-files/__init__.py"),
             mode: rpm::FileMode::regular(0o644),
             ownership: rpm::FileOwnership {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756059087),
+            modified_at: rpm::Timestamp(1600000000),
             size: 0,
             flags: rpm::FileFlags::empty(),
             digest: Some(rpm::FileDigest {
@@ -517,7 +558,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756059087),
+            modified_at: rpm::Timestamp(1600000000),
             size: 53,
             flags: rpm::FileFlags::empty(),
             digest: Some(rpm::FileDigest {
@@ -530,13 +571,43 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             ima_signature: None,
         },
         rpm::FileEntry {
+            path: PathBuf::from("/usr/share/man/test-adding-files"),
+            mode: rpm::FileMode::dir(0o755),
+            ownership: rpm::FileOwnership {
+                user: "root".to_owned(),
+                group: "root".to_owned(),
+            },
+            modified_at: rpm::Timestamp(1600000000),
+            size: 0,
+            flags: rpm::FileFlags::empty(),
+            digest: None,
+            caps: None,
+            linkto: "".to_owned(),
+            ima_signature: None,
+        },
+        rpm::FileEntry {
+            path: PathBuf::from("/usr/share/man/test-adding-files/bar"),
+            mode: rpm::FileMode::dir(0o755),
+            ownership: rpm::FileOwnership {
+                user: "root".to_owned(),
+                group: "root".to_owned(),
+            },
+            modified_at: rpm::Timestamp(1600000000),
+            size: 0,
+            flags: rpm::FileFlags::empty(),
+            digest: None,
+            caps: None,
+            linkto: "".to_owned(),
+            ima_signature: None,
+        },
+        rpm::FileEntry {
             path: PathBuf::from("/usr/share/man/test-adding-files/bar/a.txt"),
             mode: rpm::FileMode::regular(0o644),
             ownership: rpm::FileOwnership {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756496832),
+            modified_at: rpm::Timestamp(1600000000),
             size: 4,
             flags: rpm::FileFlags::DOC,
             digest: Some(rpm::FileDigest {
@@ -555,7 +626,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756496832),
+            modified_at: rpm::Timestamp(1600000000),
             size: 4,
             flags: rpm::FileFlags::DOC,
             digest: Some(rpm::FileDigest {
@@ -574,7 +645,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756059087),
+            modified_at: rpm::Timestamp(1600000000),
             size: 31,
             flags: rpm::FileFlags::DOC,
             digest: Some(rpm::FileDigest {
@@ -593,7 +664,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756496832),
+            modified_at: rpm::Timestamp(1600000000),
             size: 4,
             flags: rpm::FileFlags::DOC,
             digest: Some(rpm::FileDigest {
@@ -612,7 +683,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 user: "root".to_owned(),
                 group: "root".to_owned(),
             },
-            modified_at: rpm::Timestamp(1756059087),
+            modified_at: rpm::Timestamp(1600000000),
             size: 118,
             flags: rpm::FileFlags::empty(),
             digest: Some(rpm::FileDigest {
