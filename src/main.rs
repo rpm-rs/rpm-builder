@@ -4,7 +4,7 @@ use clap_derive::{Parser, ValueEnum};
 use regex::Regex;
 
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(name = "rpm-builder", about = "Build RPMs with ease")]
@@ -306,9 +306,26 @@ fn main() -> Result<()> {
             .with_context(|| format!("error adding doc file {}", src))?;
     }
 
-    builder = process_dir(&args.dir, builder, |o| o)?;
-    builder = process_dir(&args.doc_dir, builder, |o| o.doc())?;
-    builder = process_dir(&args.config_dir, builder, |o| o.config())?;
+    for dir in &args.dir {
+        let (src, dest) = parse_src_dest(dir)?;
+        builder = builder
+            .with_dir(src, dest, |o| o)
+            .with_context(|| format!("error adding dir {}", src))?;
+    }
+
+    for dir in &args.doc_dir {
+        let (src, dest) = parse_src_dest(dir)?;
+        builder = builder
+            .with_dir(src, dest, |o| o.doc())
+            .with_context(|| format!("error adding doc dir {}", src))?;
+    }
+
+    for dir in &args.config_dir {
+        let (src, dest) = parse_src_dest(dir)?;
+        builder = builder
+            .with_dir(src, dest, |o| o.config())
+            .with_context(|| format!("error adding config dir {}", src))?;
+    }
 
     if let Some(scriptlet_path) = args.pre_install_script {
         let content = fs::read_to_string(&scriptlet_path)
@@ -420,76 +437,23 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn process_dir<F>(
-    dirs: &[String],
-    mut builder: rpm::PackageBuilder,
-    options_modifier: F,
-) -> Result<rpm::PackageBuilder>
-where
-    F: Fn(rpm::FileOptionsBuilder) -> rpm::FileOptionsBuilder,
-{
-    for dir in dirs {
-        let parts: Vec<&str> = dir.split(":").collect();
-        if parts.len() != 2 {
-            anyhow::bail!(
-                "invalid file argument:{} it needs to be of the form <source-path>:<dest-path>",
-                dir
-            );
-        }
-        let dir = parts[0];
-        let target = PathBuf::from(parts[1]);
-        builder = add_dir(dir, &target, builder, &options_modifier)
-            .with_context(|| format!("error adding dir {}", dir))?;
+fn parse_src_dest(input: &str) -> Result<(&str, &str)> {
+    let parts: Vec<&str> = input.split(":").collect();
+    if parts.len() != 2 {
+        anyhow::bail!(
+            "invalid file argument:{} it needs to be of the form <source-path>:<dest-path>",
+            input
+        );
     }
-    Ok(builder)
-}
-
-fn add_dir<P: AsRef<Path>, F>(
-    full_path: P,
-    target_path: &PathBuf,
-    mut builder: rpm::PackageBuilder,
-    options_modifier: &F,
-) -> Result<rpm::PackageBuilder>
-where
-    F: Fn(rpm::FileOptionsBuilder) -> rpm::FileOptionsBuilder,
-{
-    for entry in std::fs::read_dir(full_path)? {
-        let entry = entry?;
-        let metadata = entry.metadata()?;
-        let mut new_target = target_path.clone();
-
-        let source = if metadata.file_type().is_symlink() {
-            std::fs::read_link(entry.path().as_path())?
-        } else {
-            entry.path()
-        };
-
-        let file_name = source.file_name().context("path does not have filename")?;
-
-        new_target.push(file_name);
-
-        builder = if metadata.file_type().is_dir() {
-            add_dir(&source, &new_target, builder, options_modifier)?
-        } else {
-            let options = options_modifier(rpm::FileOptions::new(new_target.to_string_lossy()));
-            builder.with_file(&source, options)?
-        }
-    }
-    Ok(builder)
+    Ok((parts[0], parts[1]))
 }
 
 fn parse_file_options(raw_files: &Vec<String>) -> Result<Vec<(&str, rpm::FileOptionsBuilder)>> {
     raw_files
         .iter()
         .map(|input| {
-            let parts: Vec<&str> = input.split(":").collect();
-            if parts.len() != 2 {
-                anyhow::bail!(
-                    "invalid file argument:{} it needs to be of the form <source-path>:<dest-path>",
-                    input
-                );
-            }
-            Ok((parts[0], rpm::FileOptions::new(parts[1])))
+            let (src, dest) = parse_src_dest(input)?;
+            Ok((src, rpm::FileOptions::new(dest)))
         })
         .collect()
 }
