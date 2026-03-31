@@ -654,7 +654,7 @@ fn test_signature() -> Result<(), Box<dyn std::error::Error>> {
 
     let pkg = rpm::Package::open(&out_file)?;
     let raw_public_key = fs::read(public_key_path)?;
-    let verifier = rpm::signature::pgp::Verifier::load_from_asc_bytes(&raw_public_key)?;
+    let verifier = rpm::signature::pgp::Verifier::from_asc_bytes(&raw_public_key)?;
     pkg.verify_signature(verifier)?;
 
     Ok(())

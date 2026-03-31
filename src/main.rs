@@ -296,19 +296,19 @@ fn main() -> Result<()> {
 
     for (src, options) in parse_file_options(&args.config_file)? {
         builder = builder
-            .with_file(src, options.is_config())
+            .with_file(src, options.config())
             .with_context(|| format!("error adding config file {}", src))?;
     }
 
     for (src, options) in parse_file_options(&args.doc_file)? {
         builder = builder
-            .with_file(src, options.is_doc())
+            .with_file(src, options.doc())
             .with_context(|| format!("error adding doc file {}", src))?;
     }
 
     builder = process_dir(&args.dir, builder, |o| o)?;
-    builder = process_dir(&args.doc_dir, builder, |o| o.is_doc())?;
-    builder = process_dir(&args.config_dir, builder, |o| o.is_config())?;
+    builder = process_dir(&args.doc_dir, builder, |o| o.doc())?;
+    builder = process_dir(&args.config_dir, builder, |o| o.config())?;
 
     if let Some(scriptlet_path) = args.pre_install_script {
         let content = fs::read_to_string(&scriptlet_path)
@@ -400,13 +400,12 @@ fn main() -> Result<()> {
             )
         })?;
 
-        let signer =
-            rpm::signature::pgp::Signer::load_from_asc_bytes(&raw_key).with_context(|| {
-                format!(
-                    "unable to create signer from private key {:?}",
-                    signing_key_path
-                )
-            })?;
+        let signer = rpm::signature::pgp::Signer::from_asc_bytes(&raw_key).with_context(|| {
+            format!(
+                "unable to create signer from private key {:?}",
+                signing_key_path
+            )
+        })?;
 
         builder.build_and_sign(signer)?
     } else {
