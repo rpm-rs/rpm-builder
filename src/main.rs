@@ -412,25 +412,9 @@ fn main() -> Result<()> {
         builder.build()?
     };
 
-    let filename = format!("{}.rpm", pkg.metadata.get_nevra().unwrap().nvra());
+    let output_path = args.out.unwrap_or_else(|| PathBuf::from("."));
 
-    let output_path = args
-        .out
-        .map(|path| {
-            if fs::metadata(&path).is_ok_and(|m| m.is_dir()) {
-                Path::new(&path).join(filename)
-            } else {
-                Path::new(&path).with_extension("rpm")
-            }
-        })
-        .unwrap_or_else(|| {
-            PathBuf::from(format!("{}.rpm", pkg.metadata.get_nevra().unwrap().nvra()))
-        });
-
-    let mut out_file = fs::File::create(&output_path)
-        .with_context(|| format!("unable to create output file {:?}", &output_path))?;
-
-    pkg.write(&mut out_file)
+    pkg.write_to(&output_path)
         .with_context(|| format!("unable to write package to path {:?}", &output_path))?;
 
     Ok(())
