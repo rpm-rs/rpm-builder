@@ -1,6 +1,6 @@
 [package]
 name = "rpm-builder"
-version = "0.2.1"
+version = "0.3.0"
 authors = [
     "Daniel Alley <dalley@redhat.com",
     "Rene Richter <richterrettich@gmail.com>",
@@ -14,15 +14,15 @@ categories = ["parsing", "development-tools"]
 description = "A simple Rust CLI utility for creating simple RPMs"
 
 [dependencies]
-rpm = { version = "0.19.0", default-features = false, features = ["zstd-compression", "gzip-compression", "signature-pgp"] }
-clap_derive = { version = "4.5" }
+rpm = { version = "0.20.0", default-features = false, features = ["zstd-compression", "gzip-compression", "signature-pgp"] }
+clap_derive = { version = "4.6" }
 chrono = "0.4"
 regex = "1"
-clap = "4.5"
+clap = "4.6"
 anyhow = "1.0"
 
 [dev-dependencies]
-assert_cmd = "2.1"
+assert_cmd = "2.2"
 tempdir = "0.3"
 predicates = "3.1"
 pretty_assertions = "1.4"
