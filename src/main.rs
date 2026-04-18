@@ -277,52 +277,50 @@ fn main() -> Result<()> {
         &args.license,
         &args.arch,
         &args.summary,
-    )
-    .using_config(config)
-    .release(args.release)
-    .epoch(args.epoch);
+    );
+    builder.using_config(config).release(args.release).epoch(args.epoch);
 
     for (src, options) in parse_file_options(&args.file)? {
-        builder = builder
+        builder
             .with_file(src, options)
             .with_context(|| format!("error adding regular file {}", src))?;
     }
 
     for (src, options) in parse_file_options(&args.exec_file)? {
-        builder = builder
+        builder
             .with_file(src, options.mode(0o100755))
             .with_context(|| format!("error adding executable file {}", src))?;
     }
 
     for (src, options) in parse_file_options(&args.config_file)? {
-        builder = builder
+        builder
             .with_file(src, options.config())
             .with_context(|| format!("error adding config file {}", src))?;
     }
 
     for (src, options) in parse_file_options(&args.doc_file)? {
-        builder = builder
+        builder
             .with_file(src, options.doc())
             .with_context(|| format!("error adding doc file {}", src))?;
     }
 
     for dir in &args.dir {
         let (src, dest) = parse_src_dest(dir)?;
-        builder = builder
+        builder
             .with_dir(src, dest, |o| o)
             .with_context(|| format!("error adding dir {}", src))?;
     }
 
     for dir in &args.doc_dir {
         let (src, dest) = parse_src_dest(dir)?;
-        builder = builder
+        builder
             .with_dir(src, dest, |o| o.doc())
             .with_context(|| format!("error adding doc dir {}", src))?;
     }
 
     for dir in &args.config_dir {
         let (src, dest) = parse_src_dest(dir)?;
-        builder = builder
+        builder
             .with_dir(src, dest, |o| o.config())
             .with_context(|| format!("error adding config dir {}", src))?;
     }
@@ -330,25 +328,25 @@ fn main() -> Result<()> {
     if let Some(scriptlet_path) = args.pre_install_script {
         let content = fs::read_to_string(&scriptlet_path)
             .with_context(|| format!("error reading pre-install-script {:?}", scriptlet_path))?;
-        builder = builder.pre_install_script(content);
+        builder.pre_install_script(content);
     }
 
     if let Some(scriptlet_path) = args.post_install_script {
         let content = fs::read_to_string(&scriptlet_path)
             .with_context(|| format!("error reading post-install-script {:?}", scriptlet_path))?;
-        builder = builder.post_install_script(content);
+        builder.post_install_script(content);
     }
 
     if let Some(scriptlet_path) = args.pre_uninstall_script {
         let content = fs::read_to_string(&scriptlet_path)
             .with_context(|| format!("error reading pre-uninstall-script {:?}", scriptlet_path))?;
-        builder = builder.pre_uninstall_script(content);
+        builder.pre_uninstall_script(content);
     }
 
     if let Some(scriptlet_path) = args.post_uninstall_script {
         let content = fs::read_to_string(&scriptlet_path)
             .with_context(|| format!("error reading post-uninstall-script {:?}", scriptlet_path))?;
-        builder = builder.post_uninstall_script(content);
+        builder.post_uninstall_script(content);
     }
 
     for raw_entry in args.changelog {
@@ -366,47 +364,47 @@ fn main() -> Result<()> {
         let date = parse_result
             .with_context(|| format!("error while parsing date time: {:?}", parse_result.err()))?;
         let seconds = date.and_hms_opt(0, 0, 0).unwrap().and_utc().timestamp();
-        builder = builder.add_changelog_entry(name, content, rpm::Timestamp::from(seconds as u32));
+        builder.add_changelog_entry(name, content, rpm::Timestamp::from(seconds as u32));
     }
 
     for item in args.requires {
         let dependency = parse_dependency(&item)?;
-        builder = builder.requires(dependency);
+        builder.requires(dependency);
     }
 
     for item in args.obsoletes {
         let dependency = parse_dependency(&item)?;
-        builder = builder.obsoletes(dependency);
+        builder.obsoletes(dependency);
     }
 
     for item in args.conflicts {
         let dependency = parse_dependency(&item)?;
-        builder = builder.conflicts(dependency);
+        builder.conflicts(dependency);
     }
 
     for item in args.provides {
         let dependency = parse_dependency(&item)?;
-        builder = builder.provides(dependency);
+        builder.provides(dependency);
     }
 
     for item in args.suggests {
         let dependency = parse_dependency(&item)?;
-        builder = builder.suggests(dependency);
+        builder.suggests(dependency);
     }
 
     for item in args.enhances {
         let dependency = parse_dependency(&item)?;
-        builder = builder.enhances(dependency);
+        builder.enhances(dependency);
     }
 
     for item in args.recommends {
         let dependency = parse_dependency(&item)?;
-        builder = builder.recommends(dependency);
+        builder.recommends(dependency);
     }
 
     for item in args.supplements {
         let dependency = parse_dependency(&item)?;
-        builder = builder.supplements(dependency);
+        builder.supplements(dependency);
     }
 
     let pkg = if let Some(signing_key_path) = args.sign_with_pgp_asc {
