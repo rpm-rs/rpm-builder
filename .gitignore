@@ -1,4 +1,6 @@
 /target
 **/*.rs.bk
 *.rpm
+*.crate
 .vscode/
+/vendor/
