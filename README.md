@@ -3,6 +3,8 @@
 Build rpms without SPEC files. This is written in pure Rust, so it should be
 easy to do static linking.
 
+Available on COPR: https://copr.fedorainfracloud.org/coprs/dalley/rpm-builder/
+
 ## Example
 
 ```bash
