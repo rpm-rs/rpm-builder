@@ -406,7 +406,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             flags: rpm::FileFlags::empty(),
             digest: None,
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -421,7 +421,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             flags: rpm::FileFlags::empty(),
             digest: None,
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -440,7 +440,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -459,7 +459,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -478,7 +478,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -497,7 +497,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -516,7 +516,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -531,7 +531,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             flags: rpm::FileFlags::empty(),
             digest: None,
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -550,7 +550,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -569,7 +569,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -584,7 +584,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             flags: rpm::FileFlags::empty(),
             digest: None,
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -599,7 +599,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
             flags: rpm::FileFlags::empty(),
             digest: None,
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -618,7 +618,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -637,7 +637,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -656,7 +656,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -675,7 +675,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
         rpm::FileEntry {
@@ -694,7 +694,7 @@ fn test_adding_files() -> Result<(), Box<dyn std::error::Error>> {
                 algo: rpm::DigestAlgorithm::Sha2_256,
             }),
             caps: None,
-            linkto: "".to_owned(),
+            linkto: None,
             ima_signature: None,
         },
     ];
