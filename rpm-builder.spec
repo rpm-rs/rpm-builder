@@ -1,7 +1,7 @@
 %bcond check 0
 
 Name:           rpm-builder
-Version:        0.5.2
+Version:        0.5.3
 Release:        %{?autorelease}%{!?autorelease:1%{?dist}}
 Summary:        Simple Rust CLI utility for creating simple RPMs
 
